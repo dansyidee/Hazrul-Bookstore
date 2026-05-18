@@ -1,0 +1,191 @@
+// Book "database" (20 books) sourced from the Google Books API.
+// Format: [ { title, author, description, image, price, stock, genre } ]
+// NOTE: Price/stock are app-specific fields. Google Books provides metadata, not pricing/stock.
+
+// genre is used by the UI to filter books.
+window.BOOKS_DB = [
+  {
+    title: "To Kill a Mockingbird",
+    author: "Harper Lee",
+    description: "A novel of integrity and courage, set in the American South during the Great Depression. Atticus Finch defends a black man wrongly accused.",
+    image: "https://covers.openlibrary.org/b/isbn/9780061120084-L.jpg",
+    price: 28.00,
+    stock: 12,
+    genre: 'Fiction'
+  },
+  {
+    title: "1984",
+    author: "George Orwell",
+    description: "A chilling portrait of a totalitarian future where truth is manipulated and freedom is systematically suppressed.",
+    image: "https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg",
+    price: 25.20,
+    stock: 9,
+    genre: 'Fiction'
+  },
+
+  {
+    title: "The Great Gatsby",
+    author: "F. Scott Fitzgerald",
+    description: "Jay Gatsby's pursuit of a green light and an idealized past, through the eyes of Nick Carraway.",
+    image: "https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg",
+
+    price: 24.50,
+    stock: 7,
+    genre: 'Fiction'
+  },
+  {
+    title: "Pride and Prejudice",
+    author: "Jane Austen",
+    description: "Sharp wit and social commentary as Elizabeth Bennet navigates first impressions, prejudice, and evolving understanding.",
+    image: "https://covers.openlibrary.org/b/isbn/9780141439518-L.jpg",
+    price: 22.90,
+    stock: 15,
+    genre: 'Fiction'
+  },
+
+  {
+    title: "The Hobbit",
+    author: "J. R. R. Tolkien",
+    description: "Bilbo Baggins joins a company of dwarves on an unexpected journey to reclaim their homeland from a dragon.",
+    image: "https://covers.openlibrary.org/b/isbn/9780261103344-L.jpg",
+    price: 29.00,
+    stock: 6,
+    genre: 'Fiction'
+  },
+  {
+    title: "Harry Potter and the Sorcerer’s Stone",
+    author: "J. K. Rowling",
+    description: "A young wizard discovers his destiny and begins an adventure filled with wonder, danger, and friendship.",
+    image: "https://mphonline.com/cdn/shop/files/9781408855652_HarryPotterandthePhilosopher_sStone_mph.jpg?v=1701002094whi",
+    price: 27.50,
+    stock: 20,
+    genre: 'Fiction'
+  },
+  {
+    title: "The Alchemist",
+    author: "Paulo Coelho",
+    description: "A shepherd's journey toward personal legend explores fate, faith, and the pursuit of meaning.",
+    image: "https://covers.openlibrary.org/b/isbn/9780061122415-L.jpg",
+    price: 23.80,
+    stock: 14,
+    genre: 'Fiction'
+  },
+  {
+    title: "The Catcher in the Rye",
+    author: "J. D. Salinger",
+    description: "Holden Caulfield offers a raw, candid view of adolescence and alienation in post-war America.",
+    image: "https://covers.openlibrary.org/b/isbn/9780316769488-L.jpg",
+    price: 21.50,
+    stock: 10,
+    genre: 'Fiction'
+  },
+  {
+    title: "Animal Farm",
+    author: "George Orwell",
+    description: "A farm uprising turns into a new tyranny, using allegory to critique political manipulation.",
+    image: "https://covers.openlibrary.org/b/isbn/9780451526342-L.jpg",
+    price: 18.90,
+    stock: 11,
+    genre: 'Fiction'
+  },
+  {
+    title: "The Lord of the Rings",
+    author: "J. R. R. Tolkien",
+    description: "Frodo and the Fellowship struggle to destroy a powerful ring and resist the dark forces of Sauron.",
+    image: "https://covers.openlibrary.org/b/isbn/9780261103573-L.jpg",
+    price: 35.00,
+    stock: 5,
+    genre: 'Fiction'
+  },
+  {
+    title: "The Name of the Rose",
+    author: "Umberto Eco",
+    description: "A medieval mystery unfolds in a monastery library, blending philosophy, faith, and a deadly secret.",
+    image: "https://covers.openlibrary.org/b/isbn/9780151808120-L.jpg",
+    price: 26.99,
+    stock: 8,
+    genre: 'Fiction'
+  },
+  {
+    title: "The Diary of a Young Girl",
+    author: "Anne Frank",
+    description: "An intimate record of a family's life hidden during the Nazi occupation, written with clarity and hope.",
+    image: "https://covers.openlibrary.org/b/isbn/9780553296983-L.jpg",
+    price: 19.99,
+    stock: 13,
+    genre: 'Fiction'
+  },
+  {
+    title: "Dune",
+    author: "Frank Herbert",
+    description: "Paul Atreides navigates politics and prophecy on the desert planet Arrakis, home to the spice melange.",
+    image: "https://covers.openlibrary.org/b/isbn/9780441172719-L.jpg",
+    price: 32.00,
+    stock: 6,
+    genre: 'Fiction'
+  },
+  {
+    title: "Sapiens",
+    author: "Yuval Noah Harari",
+    description: "A sweeping history of humankind, exploring how biology, culture, and technology shaped society.",
+    image: "https://covers.openlibrary.org/b/isbn/9780062316110-L.jpg",
+    price: 29.50,
+    stock: 9,
+    genre: 'Non-fiction'
+  },
+  {
+    title: "The Design of Everyday Things",
+    author: "Don Norman",
+    description: "How user-centered design reduces confusion and makes products easier to understand and use.",
+    image: "https://covers.openlibrary.org/b/isbn/9780465067107-L.jpg",
+    price: 24.00,
+    stock: 16,
+    genre: 'Non-fiction'
+  },
+  {
+    title: "Atomic Habits",
+    author: "James Clear",
+    description: "Practical strategies for building good habits and breaking bad ones through small, consistent changes.",
+    image: "https://covers.openlibrary.org/b/isbn/9780735211292-L.jpg",
+    price: 23.20,
+    stock: 18,
+    genre: 'Non-fiction'
+  },
+  {
+    title: "The 7 Habits of Highly Effective People",
+    author: "Stephen R. Covey",
+    description: "A timeless framework for personal and professional effectiveness based on principles and character.",
+    image: "https://www.bookxcess.com/cdn/shop/products/9781451639612_1_1500x.jpg?v=1685069696",
+    price: 21.00,
+    stock: 10,
+    genre: 'Non-fiction'
+  },
+  {
+    title: "The Hunger Games",
+    author: "Suzanne Collins",
+    description: "In a dystopian future, Katniss Everdeen becomes a symbol of rebellion in a televised survival game.",
+    image: "https://covers.openlibrary.org/b/isbn/9780439023528-L.jpg",
+    price: 26.00,
+    stock: 12,
+    genre: 'Fiction'
+  },
+  {
+    title: "The Road",
+    author: "Cormac McCarthy",
+    description: "A father and son travel through a post-apocalyptic landscape, carrying hope amid relentless despair.",
+    image: "https://covers.openlibrary.org/b/isbn/9780679783268-L.jpg",
+    price: 20.50,
+    stock: 7,
+    genre: 'Fiction'
+  },
+  {
+    title: "The Book Thief",
+    author: "Markus Zusak",
+    description: "In Nazi Germany, a foster girl steals books and finds words as a form of resistance and connection.",
+    image: "https://covers.openlibrary.org/b/isbn/9780375842207-L.jpg",
+    price: 24.75,
+    stock: 11,
+    genre: 'Fiction'
+  }
+];
+
