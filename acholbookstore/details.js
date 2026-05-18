@@ -57,4 +57,45 @@ window.showBookDetails = function showBookDetails(book) {
   }
 })();
 
+// Wishlist handler for details page.
+(function attachDetailsWishlistHandler() {
+  try {
+    const btn = document.getElementById('wishlist-button');
+    if (!btn) return;
+
+    const raw = sessionStorage.getItem('book-details');
+    const data = raw ? JSON.parse(raw) : null;
+    if (!data) return;
+
+    const getWishlistItems = () => {
+      try {
+        const wishlistRaw = sessionStorage.getItem('wishlist');
+        const wishlist = wishlistRaw ? JSON.parse(wishlistRaw) : [];
+        return Array.isArray(wishlist) ? wishlist : [];
+      } catch (e) {
+        return [];
+      }
+    };
+
+    const inWishlist = () => getWishlistItems().some((item) => String(item.title || '').trim() === String(data.title || '').trim());
+
+    const updateButton = () => {
+      btn.textContent = inWishlist() ? 'Wishlisted' : 'Add to Wishlist';
+    };
+
+    updateButton();
+
+    btn.addEventListener('click', () => {
+      if (inWishlist()) {
+        window.removeBookFromWishlist && window.removeBookFromWishlist(data.title);
+      } else {
+        window.addBookToWishlist && window.addBookToWishlist(data);
+      }
+
+      updateButton();
+    });
+  } catch (e) {
+    // ignore
+  }
+})();
 

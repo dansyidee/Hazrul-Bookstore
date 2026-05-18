@@ -181,6 +181,7 @@ function renderBooks(books) {
       seeBtn.addEventListener('click', () => {
         window.showBookDetails({
           title: b.title,
+          author: b.author,
           genre: b.genre,
           description: b.description || 'No description available.',
           image: b.image,
