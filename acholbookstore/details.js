@@ -20,34 +20,17 @@ window.showBookDetails = function showBookDetails(book) {
       const data = raw ? JSON.parse(raw) : null;
       if (!data) return;
 
+      if (typeof window.showQuantityModal === 'function') {
+        window.showQuantityModal(data);
+        return;
+      }
+
       const qtyStr = window.prompt(`Enter quantity for: ${data.title}`, '1');
       if (qtyStr === null) return;
       const qty = Math.max(1, Number(qtyStr) || 1);
 
-      // Block adding to cart if quantity exceeds available stock.
-      if (typeof data.stock === 'number' && Number.isFinite(data.stock) && qty > data.stock) {
-        const msg = document.createElement('div');
-        msg.textContent = 'The Quantity Entered EXIDING the Stock Quantity, Please Enter Again';
-        msg.style.position = 'fixed';
-        msg.style.top = '20px';
-        msg.style.left = '50%';
-        msg.style.transform = 'translateX(-50%)';
-        msg.style.background = '#fff';
-        msg.style.border = '1px solid #e00';
-        msg.style.color = '#e00';
-        msg.style.padding = '10px 14px';
-        msg.style.borderRadius = '8px';
-        msg.style.zIndex = '99999';
-        msg.style.fontFamily = 'Arial';
-        document.body.appendChild(msg);
-        setTimeout(() => msg.remove(), 2500);
-        return;
-      }
-
       const rawCart = sessionStorage.getItem('cart');
-
       const cart = rawCart ? JSON.parse(rawCart) : [];
-
       const idx = Array.isArray(cart) ? cart.findIndex((x) => x.title === data.title) : -1;
       if (idx >= 0) {
         cart[idx].qty = (Number(cart[idx].qty) || 0) + qty;
@@ -64,18 +47,14 @@ window.showBookDetails = function showBookDetails(book) {
       }
 
       sessionStorage.setItem('cart', JSON.stringify(cart));
-
-      // if home.html is open in another tab, this won't fire, but same-tab works.
       try {
         window.dispatchEvent(new Event('cart:updated'));
       } catch (e) {}
-
       alert('Added to cart');
     });
   } catch (e) {
     // ignore
   }
 })();
-
 
 

@@ -24,7 +24,7 @@
 
 
     <div class="nav-right">
-      <a href="#">Account</a>
+      <a href="wishlist.html">Wishlist</a>
       <details class="nav-cart" id="cart-dropdown">
         <summary id="cart-summary">Cart (<span id="cart-count">0</span>)</summary>
         <div class="cart-panel" id="cart-panel">
@@ -44,6 +44,7 @@
 
   <div class="nav-bottom">
     <a href="home.html">Home</a>
+    <a href="wishlist.html">Wishlist</a>
 
     <details class="nav-filter">
       <summary>Filter</summary>
@@ -78,8 +79,18 @@
       </div>
     </details>
 
-    <a href="#">New Releases</a>
-    <a href="#">Bestsellers</a>
+    <div class="sort-wrapper">
+      <label for="sort-order">Sort</label>
+      <select id="sort-order" onchange="window.applySort && window.applySort()">
+        <option value="">Default</option>
+        <option value="title-asc">A - Z</option>
+        <option value="price-asc">Price Low - High</option>
+        <option value="price-desc">Price High - Low</option>
+      </select>
+    </div>
+
+    <a href="#new-release-section">New Releases</a>
+    <a href="#best-sellers-section">Bestsellers</a>
     <a href="about.html">About</a>
   </div>
 
@@ -96,6 +107,21 @@
 
   <button class="prev" onclick="moveSlide(-1)">❮</button>
   <button class="next" onclick="moveSlide(1)">❯</button>
+</div>
+
+<div class="featured-bar">
+  <div class="featured-card" id="new-release-section">
+    <h2>New Releases</h2>
+    <div class="featured-list" id="new-releases"></div>
+  </div>
+  <div class="featured-card" id="best-sellers-section">
+    <h2>Best Sellers</h2>
+    <div class="featured-list" id="best-sellers"></div>
+  </div>
+  <div class="featured-card" id="top-ten-section">
+    <h2>Top 10 Malaysia</h2>
+    <div class="featured-list" id="top-ten"></div>
+  </div>
 </div>
 
 <!-- MAIN -->
@@ -141,18 +167,54 @@
 
 
   <div class="footer-bottom">© <span id="year"></span> HazrulBookStore. All rights reserved.</div>
-</footer>
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-title">HazrulBookStore</div>
+        <p>Discover curated new releases, best sellers, and local favorites with an easy shopping experience.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-head">Menu</div>
+        <a href="home.html">Home</a>
+        <a href="wishlist.html">Wishlist</a>
+        <a href="about.html">About</a>
+      </div>
+      <div class="footer-contact">
+        <div class="footer-head">Contact</div>
+        <p>acholbooks@gmail.com</p>
+        <p>+60 12-345 6789</p>
+      </div>
+      <div class="footer-social">
+        <div class="footer-head">Social</div>
+        <p>Facebook</p>
+        <p>Instagram</p>
+        <p>TikTok</p>
+      </div>
+    </div>
+    <div class="footer-bottom">© <span id="year"></span> HazrulBookStore. All rights reserved.</div>
+  </footer>
 
-<!-- Book data is loaded from books.json using AJAX in home.js. -->
-<script src="details.js"></script>
-<!-- EmailJS (required for Buy Now email sending). Replace init() values in home.js. -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="home.js"></script>
+  <div class="accessibility-tools" id="accessibility-tools">
+    <button type="button" class="primary" onclick="window.toggleAccessibilityMenu && window.toggleAccessibilityMenu()">Accessibility</button>
+    <div class="accessibility-panel hidden" id="accessibility-panel">
+      <button type="button" onclick="window.setPageTheme && window.setPageTheme('')">Normal</button>
+      <button type="button" onclick="window.setPageTheme && window.setPageTheme('grayscale')">Grayscale</button>
+      <button type="button" onclick="window.setPageTheme && window.setPageTheme('high-contrast')">High Contrast</button>
+      <button type="button" onclick="window.zoomIn && window.zoomIn()">Zoom In</button>
+      <button type="button" onclick="window.zoomOut && window.zoomOut()">Zoom Out</button>
+      <button type="button" onclick="window.setPageTheme && window.setPageTheme('reduced-motion')">Reduced Motion</button>
+    </div>
+  </div>
 
-<script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-</script>
+  <!-- Book data is loaded from books.json using AJAX in home.js. -->
+  <script src="details.js"></script>
+  <!-- EmailJS (required for Buy Now email sending). Replace init() values in home.js. -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="home.js"></script>
 
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 
 </body>
 </html>

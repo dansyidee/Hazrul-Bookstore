@@ -13,6 +13,127 @@ function moveSlide(step) {
   slides.style.transform = `translateX(-${index * 100}%)`;
 }
 
+function getWishlist() {
+  try {
+    const raw = sessionStorage.getItem('wishlist');
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function setWishlist(items) {
+  try {
+    sessionStorage.setItem('wishlist', JSON.stringify(Array.isArray(items) ? items : []));
+  } catch (e) {
+    // ignore
+  }
+}
+
+function isBookInWishlist(book) {
+  if (!book || !book.title) return false;
+  return getWishlist().some((item) => String(item.title || '').trim() === String(book.title || '').trim());
+}
+
+window.addBookToWishlist = function addBookToWishlist(book) {
+  if (!book || !book.title) return;
+  const wishlist = getWishlist();
+  const exists = wishlist.some((item) => String(item.title || '').trim() === String(book.title || '').trim());
+  if (exists) return;
+
+  wishlist.push({
+    title: book.title,
+    author: book.author,
+    image: book.image,
+    price: book.price,
+    genre: book.genre
+  });
+  setWishlist(wishlist);
+  try {
+    window.dispatchEvent(new Event('wishlist:updated'));
+  } catch (e) {}
+};
+
+window.removeBookFromWishlist = function removeBookFromWishlist(title) {
+  if (!title) return;
+  const updated = getWishlist().filter((item) => String(item.title || '').trim() !== String(title || '').trim());
+  setWishlist(updated);
+  try {
+    window.dispatchEvent(new Event('wishlist:updated'));
+  } catch (e) {}
+};
+
+function getSortOrder() {
+  const sortSelect = document.getElementById('sort-order');
+  return sortSelect ? sortSelect.value : '';
+}
+
+function sortBooks(items) {
+  const order = getSortOrder();
+  if (!Array.isArray(items) || !order) return items;
+
+  const sorted = [...items];
+
+  if (order === 'title-asc') {
+    sorted.sort((a, b) => String(a.title || '').localeCompare(String(b.title || ''), undefined, { sensitivity: 'base' }));
+  }
+  if (order === 'price-asc') {
+    sorted.sort((a, b) => Number(a.price) - Number(b.price));
+  }
+  if (order === 'price-desc') {
+    sorted.sort((a, b) => Number(b.price) - Number(a.price));
+  }
+
+  return sorted;
+}
+
+window.toggleAccessibilityMenu = function toggleAccessibilityMenu() {
+  const panel = document.getElementById('accessibility-panel');
+  if (!panel) return;
+  panel.classList.toggle('hidden');
+};
+
+window.setPageTheme = function setPageTheme(theme) {
+  document.documentElement.classList.remove('grayscale', 'high-contrast', 'reduced-motion');
+  document.body.classList.remove('grayscale', 'high-contrast', 'reduced-motion');
+  if (theme) {
+    document.documentElement.classList.add(theme);
+  } else {
+    window.zoomLevel = 100;
+    if (typeof window.updatePageZoom === 'function') {
+      window.updatePageZoom();
+    }
+  }
+};
+
+window.zoomLevel = window.zoomLevel || 100;
+window.updatePageZoom = function updatePageZoom() {
+  const scale = Math.min(1.4, Math.max(0.8, window.zoomLevel / 100));
+  document.documentElement.style.fontSize = `${window.zoomLevel}%`;
+
+  if ('zoom' in document.documentElement.style) {
+    document.documentElement.style.zoom = scale;
+    document.body.style.transform = '';
+  } else {
+    document.documentElement.style.zoom = '';
+    document.body.style.transformOrigin = '0 0';
+    document.body.style.transform = `scale(${scale})`;
+    document.body.style.width = '100%';
+  }
+};
+
+window.zoomIn = function zoomIn() {
+  window.zoomLevel = Math.min(140, window.zoomLevel + 10);
+  window.updatePageZoom();
+};
+
+window.zoomOut = function zoomOut() {
+  window.zoomLevel = Math.max(80, window.zoomLevel - 10);
+  window.updatePageZoom();
+};
+
+window.updatePageZoom();
+
 // Auto slide
 if (totalSlides > 0) {
   setInterval(() => {
@@ -49,7 +170,10 @@ function renderBooks(books) {
       <p>RM${Number(b.price).toFixed(2)}</p>
       <p>${stockText}</p>
 
-      <button class="add-to-cart-btn" type="button">Add to Cart</button>
+      <div class="book-actions">
+        <button class="add-to-cart-btn" type="button">Add to Cart</button>
+        <button class="wishlist-btn" type="button">${isBookInWishlist(b) ? 'Wishlisted' : 'Add to Wishlist'}</button>
+      </div>
     `;
 
     const seeBtn = el.querySelector('.overlay button');
@@ -71,6 +195,26 @@ function renderBooks(books) {
       addBtn.addEventListener('click', () => {
         showQuantityModal(b);
       });
+    }
+
+    const wishlistBtn = el.querySelector('.wishlist-btn');
+    if (wishlistBtn) {
+      wishlistBtn.addEventListener('click', () => {
+        if (isBookInWishlist(b)) {
+          window.removeBookFromWishlist && window.removeBookFromWishlist(b.title);
+          wishlistBtn.textContent = 'Add to Wishlist';
+          wishlistBtn.classList.remove('wishlisted');
+          return;
+        }
+
+        window.addBookToWishlist && window.addBookToWishlist(b);
+        wishlistBtn.textContent = 'Wishlisted';
+        wishlistBtn.classList.add('wishlisted');
+      });
+    }
+
+    if (wishlistBtn && isBookInWishlist(b)) {
+      wishlistBtn.classList.add('wishlisted');
     }
 
     el.classList.add('reveal');
@@ -231,7 +375,7 @@ async function applyFilters() {
       })
     : [];
 
-  renderBooks(filtered);
+  renderBooks(sortBooks(filtered));
 }
 
 // ----- Scroll reveal for book cards -----
@@ -312,8 +456,10 @@ window.loadAndRenderBooks = async function loadAndRenderBooks() {
   const searchInput = document.getElementById('search-term');
   const q = (searchInput && searchInput.value ? searchInput.value : '').trim().toLowerCase();
 
+  renderFeaturedSections(allBooks);
+
   if (!q) {
-    renderBooks(allBooks);
+    renderBooks(sortBooks(allBooks));
     return;
   }
 
@@ -325,7 +471,7 @@ window.loadAndRenderBooks = async function loadAndRenderBooks() {
       })
     : [];
 
-  renderBooks(filtered);
+  renderBooks(sortBooks(filtered));
 };
 
 window.handleSearch = async function handleSearch() {
@@ -368,6 +514,7 @@ function wireLiveFiltering() {
   const minEl = document.getElementById('filter-price-min');
   const maxEl = document.getElementById('filter-price-max');
   const genreChecks = Array.from(document.querySelectorAll('input.genre-check'));
+  const sortSelect = document.getElementById('sort-order');
 
   const runSearch = debounce(() => {
     window.loadAndRenderBooks();
@@ -382,7 +529,29 @@ function wireLiveFiltering() {
   if (minEl) minEl.addEventListener('input', runFilters);
   if (maxEl) maxEl.addEventListener('input', runFilters);
   genreChecks.forEach((check) => check.addEventListener('change', runFilters));
+  if (sortSelect) sortSelect.addEventListener('change', () => {
+    window.applySort && window.applySort();
+  });
 }
+
+window.applySort = async function applySort() {
+  const authorInput = document.getElementById('filter-author');
+  const minEl = document.getElementById('filter-price-min');
+  const maxEl = document.getElementById('filter-price-max');
+  const genreChecks = Array.from(document.querySelectorAll('input.genre-check'));
+
+  const hasFilter =
+    (authorInput && authorInput.value.trim()) ||
+    (minEl && minEl.value) ||
+    (maxEl && maxEl.value) ||
+    genreChecks.some((c) => c.checked);
+
+  if (hasFilter) {
+    return window.applyFilters && window.applyFilters();
+  }
+
+  return window.loadAndRenderBooks && window.loadAndRenderBooks();
+};
 
 // ----- Cart (sessionStorage) -----
 function getCart() {
@@ -695,10 +864,106 @@ window.buyNow = function buyNow() {
   });
 };
 
+function renderFeaturedSections(allBooks) {
+  const releases = document.getElementById('new-releases');
+  const best = document.getElementById('best-sellers');
+  const topTen = document.getElementById('top-ten');
+
+  if (!Array.isArray(allBooks)) {
+    if (releases) releases.innerHTML = '<div class="featured-item">No data available.</div>';
+    if (best) best.innerHTML = '<div class="featured-item">No data available.</div>';
+    if (topTen) topTen.innerHTML = '<div class="featured-item">No data available.</div>';
+    return;
+  }
+
+  const sortedByStock = [...allBooks].sort((a, b) => Number(b.stock) - Number(a.stock));
+  const alphabetic = [...allBooks].sort((a, b) => String(a.title || '').localeCompare(String(b.title || ''), undefined, { sensitivity: 'base' }));
+  const firstItems = allBooks.slice(0, 4);
+
+  if (releases) {
+    releases.innerHTML = firstItems.map((b) => `
+      <div class="featured-item">
+        <img src="${b.image}" alt="${b.title}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,${encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"160\"><rect width=\"120\" height=\"160\" fill=\"#e5e5e5\"/><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"#666\" font-family=\"Arial\" font-size=\"12\">No Image</text></svg>')}';" />
+        <div class="featured-item-title">${b.title}</div>
+      </div>
+    `).join('');
+  }
+
+  if (best) {
+    best.innerHTML = sortedByStock.slice(0, 4).map((b) => `
+      <div class="featured-item">
+        <img src="${b.image}" alt="${b.title}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,${encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"160\"><rect width=\"120\" height=\"160\" fill=\"#e5e5e5\"/><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"#666\" font-family=\"Arial\" font-size=\"12\">No Image</text></svg>')}';" />
+        <div class="featured-item-title">${b.title}</div>
+      </div>
+    `).join('');
+  }
+
+  if (topTen) {
+    topTen.innerHTML = alphabetic.slice(0, 10).map((b) => `
+      <div class="featured-item">
+        <img src="${b.image}" alt="${b.title}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,${encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"160\"><rect width=\"120\" height=\"160\" fill=\"#e5e5e5\"/><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"#666\" font-family=\"Arial\" font-size=\"12\">No Image</text></svg>')}';" />
+        <div class="featured-item-title">${b.title}</div>
+      </div>
+    `).join('');
+  }
+
+}
+
+window.renderWishlistPage = function renderWishlistPage() {
+  const container = document.getElementById('wishlist-items');
+  if (!container) return;
+
+  const wishlist = getWishlist();
+  if (!wishlist.length) {
+    container.innerHTML = '<div class="book" style="text-align:center; padding: 24px;">Your wishlist is empty. Browse books and tap Add to Wishlist.</div>';
+    return;
+  }
+
+  container.innerHTML = '';
+
+  for (const item of wishlist) {
+    const row = document.createElement('div');
+    row.className = 'book';
+    row.innerHTML = `
+      <div class="book-img">
+        <img src="${item.image || ''}" alt="${item.title || ''}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,${encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"160\"><rect width=\"120\" height=\"160\" fill=\"#e5e5e5\"/><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"#666\" font-family=\"Arial\" font-size=\"12\">No Image</text></svg>')}';" />
+      </div>
+      <h4>${item.title || ''}</h4>
+      <p>${item.author || ''}</p>
+      <p>${item.genre || ''}</p>
+      <p>RM${Number(item.price).toFixed(2)}</p>
+      <button class="wishlist-btn" type="button">Remove</button>
+    `;
+
+    const removeBtn = row.querySelector('.wishlist-btn');
+    if (removeBtn) {
+      removeBtn.addEventListener('click', () => {
+        window.removeBookFromWishlist && window.removeBookFromWishlist(item.title);
+        renderWishlistPage();
+      });
+    }
+
+    container.appendChild(row);
+  }
+};
+
+window.clearWishlist = function clearWishlist() {
+  if (!confirm('Clear all items from your wishlist?')) {
+    return;
+  }
+  setWishlist([]);
+  window.renderWishlistPage && window.renderWishlistPage();
+};
+
 function wireGlobalCartRefresh() {
   try {
     window.addEventListener('cart:updated', () => updateCartUI());
     window.addEventListener('storage', () => updateCartUI());
+    window.addEventListener('wishlist:updated', () => {
+      if (document.getElementById('wishlist-items')) {
+        window.renderWishlistPage && window.renderWishlistPage();
+      }
+    });
   } catch (e) {}
   updateCartUI();
 }
@@ -707,4 +972,8 @@ function wireGlobalCartRefresh() {
 window.loadAndRenderBooks();
 wireLiveFiltering();
 wireGlobalCartRefresh();
+
+if (document.getElementById('wishlist-items')) {
+  window.renderWishlistPage();
+}
 
