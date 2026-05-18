@@ -864,6 +864,55 @@ window.buyNow = function buyNow() {
   });
 };
 
+const featuredPageSize = 4;
+const featuredRows = {
+  'new-releases': { books: [], page: 0 },
+  'best-sellers': { books: [], page: 0 },
+  'top-ten': { books: [], page: 0 }
+};
+
+function featuredBookHTML(b) {
+  return `
+      <div class="featured-item">
+        <img src="${b.image}" alt="${b.title}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,${encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"160\"><rect width=\"120\" height=\"160\" fill=\"#e5e5e5\"/><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"#666\" font-family=\"Arial\" font-size=\"12\">No Image</text></svg>')}';" />
+        <div class="featured-item-title">${b.title}</div>
+      </div>
+    `;
+}
+
+function renderFeaturedRow(rowId) {
+  const row = featuredRows[rowId];
+  const list = document.getElementById(rowId);
+  if (!row || !list) return;
+
+  const totalPages = Math.ceil(row.books.length / featuredPageSize);
+  if (totalPages > 0) {
+    row.page = Math.min(row.page, totalPages - 1);
+  } else {
+    row.page = 0;
+  }
+
+  const start = row.page * featuredPageSize;
+  list.innerHTML = row.books.slice(start, start + featuredPageSize).map(featuredBookHTML).join('');
+
+  const buttons = list.closest('.featured-row')?.querySelectorAll('.featured-row-button');
+  if (buttons && buttons.length >= 2) {
+    buttons[0].disabled = row.page === 0;
+    buttons[1].disabled = row.page >= totalPages - 1;
+  }
+}
+
+window.moveFeaturedRow = function moveFeaturedRow(rowId, step) {
+  const row = featuredRows[rowId];
+  if (!row) return;
+
+  const totalPages = Math.ceil(row.books.length / featuredPageSize);
+  if (totalPages <= 0) return;
+
+  row.page = Math.min(Math.max(row.page + step, 0), totalPages - 1);
+  renderFeaturedRow(rowId);
+};
+
 function renderFeaturedSections(allBooks) {
   const releases = document.getElementById('new-releases');
   const best = document.getElementById('best-sellers');
@@ -878,33 +927,14 @@ function renderFeaturedSections(allBooks) {
 
   const sortedByStock = [...allBooks].sort((a, b) => Number(b.stock) - Number(a.stock));
   const alphabetic = [...allBooks].sort((a, b) => String(a.title || '').localeCompare(String(b.title || ''), undefined, { sensitivity: 'base' }));
-  const firstItems = allBooks.slice(0, 4);
 
-  if (releases) {
-    releases.innerHTML = firstItems.map((b) => `
-      <div class="featured-item">
-        <img src="${b.image}" alt="${b.title}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,${encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"160\"><rect width=\"120\" height=\"160\" fill=\"#e5e5e5\"/><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"#666\" font-family=\"Arial\" font-size=\"12\">No Image</text></svg>')}';" />
-        <div class="featured-item-title">${b.title}</div>
-      </div>
-    `).join('');
-  }
+  featuredRows['new-releases'].books = allBooks;
+  featuredRows['best-sellers'].books = sortedByStock;
+  featuredRows['top-ten'].books = alphabetic.slice(0, 10);
 
-  if (best) {
-    best.innerHTML = sortedByStock.slice(0, 4).map((b) => `
-      <div class="featured-item">
-        <img src="${b.image}" alt="${b.title}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,${encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"160\"><rect width=\"120\" height=\"160\" fill=\"#e5e5e5\"/><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"#666\" font-family=\"Arial\" font-size=\"12\">No Image</text></svg>')}';" />
-        <div class="featured-item-title">${b.title}</div>
-      </div>
-    `).join('');
-  }
-
-  if (topTen) {
-    topTen.innerHTML = alphabetic.slice(0, 10).map((b) => `
-      <div class="featured-item">
-        <img src="${b.image}" alt="${b.title}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,${encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"160\"><rect width=\"120\" height=\"160\" fill=\"#e5e5e5\"/><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"#666\" font-family=\"Arial\" font-size=\"12\">No Image</text></svg>')}';" />
-        <div class="featured-item-title">${b.title}</div>
-      </div>
-    `).join('');
+  for (const rowId of Object.keys(featuredRows)) {
+    featuredRows[rowId].page = 0;
+    renderFeaturedRow(rowId);
   }
 
 }

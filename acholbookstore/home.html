@@ -112,17 +112,41 @@
 <div class="featured-bar">
   <div class="featured-card" id="new-release-section">
     <h2>New Releases</h2>
-    <div class="featured-list" id="new-releases"></div>
+    <div class="featured-row">
+      <button class="featured-row-button" type="button" onclick="moveFeaturedRow('new-releases', -1)">❮</button>
+      <div class="featured-list-wrapper" data-featured-wrapper="new-releases">
+        <div class="featured-list" id="new-releases"></div>
+      </div>
+      <button class="featured-row-button" type="button" onclick="moveFeaturedRow('new-releases', 1)">❯</button>
+    </div>
   </div>
   <div class="featured-card" id="best-sellers-section">
     <h2>Best Sellers</h2>
-    <div class="featured-list" id="best-sellers"></div>
+    <div class="featured-row">
+      <button class="featured-row-button" type="button" onclick="moveFeaturedRow('best-sellers', -1)">❮</button>
+      <div class="featured-list-wrapper" data-featured-wrapper="best-sellers">
+        <div class="featured-list" id="best-sellers"></div>
+      </div>
+      <button class="featured-row-button" type="button" onclick="moveFeaturedRow('best-sellers', 1)">❯</button>
+    </div>
   </div>
   <div class="featured-card" id="top-ten-section">
     <h2>Top 10 Malaysia</h2>
-    <div class="featured-list" id="top-ten"></div>
+    <div class="featured-row">
+      <button class="featured-row-button" type="button" onclick="moveFeaturedRow('top-ten', -1)">❮</button>
+      <div class="featured-list-wrapper" data-featured-wrapper="top-ten">
+        <div class="featured-list" id="top-ten"></div>
+      </div>
+      <button class="featured-row-button" type="button" onclick="moveFeaturedRow('top-ten', 1)">❯</button>
+    </div>
   </div>
 </div>
+
+<section class="all-books-banner" aria-label="All Books">
+  <div class="all-books-banner-line"></div>
+  <h2>All Books</h2>
+  <div class="all-books-banner-line"></div>
+</section>
 
 <!-- MAIN -->
 <div class="container">
