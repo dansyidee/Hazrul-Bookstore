@@ -116,11 +116,78 @@
       color: #333;
     }
 
-    .footer {
-      text-align: center;
-      padding: 25px 16px;
-      color: #777;
-      font-size: 13px;
+    .about-hero {
+      background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(245,245,255,0.95));
+      color: #111;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .team-card {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      padding: 18px;
+      border-radius: 14px;
+      background: #f9f9f9;
+      color: #111;
+    }
+
+    .team-card img {
+      width: 92px;
+      height: 92px;
+      object-fit: cover;
+      border-radius: 18px;
+      border: 2px solid #ddd;
+    }
+
+    .accessibility-tools {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 10000;
+      display: grid;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .accessibility-tools button {
+      border-radius: 999px;
+      border: 1px solid #111;
+      background: #111;
+      color: #fff;
+      padding: 10px 14px;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.20);
+    }
+
+    .accessibility-panel {
+      position: absolute;
+      right: 0;
+      bottom: 56px;
+      min-width: 220px;
+      max-width: calc(100vw - 40px);
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    .accessibility-panel.hidden {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .search-bar input { width: 200px; }
+      .grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 900px) {
@@ -139,14 +206,13 @@
 
 
       <div class="nav-right">
-        <a href="#">Account</a>
         <a href="#">Cart</a>
       </div>
     </div>
 
     <div class="nav-bottom">
       <a href="home.html">Home</a>
-      <a href="home.html">Genres</a>
+      <a href="wishlist.html">Wishlist</a>
       <a href="home.html">New Releases</a>
       <a href="home.html">Bestsellers</a>
       <a href="about.html">About</a>
@@ -155,42 +221,60 @@
   </div>
 
   <div class="wrap">
-    <div class="card">
+    <div class="card about-hero">
       <div class="title">About HazrulBookStore</div>
       <p class="muted">
-        HazrulBookStore is a simple online bookstore page made to help readers discover new books,
-        browse popular titles, and get a smooth shopping experience.
+        HazrulBookStore is a modern bookstore platform designed for Malaysian readers.
+        We combine curated book discovery, elegant layouts, and actionable features like wishlist and sorting.
       </p>
     </div>
 
-    <div class="grid">
-      <div class="card">
-        <div style="font-size:18px; font-weight:700;">Our Mission</div>
-        <p class="muted">To make it easy for everyone to find books they love—fast, clean, and friendly.</p>
-        <ul class="pill-list">
-          <li>Curated selections across genres</li>
-          <li>Simple “Add to Cart” browsing experience</li>
-          <li>Clear information for each book</li>
-        </ul>
+    <div class="team-grid">
+      <div class="card team-card">
+        <img src="https://i.pravatar.cc/220?img=3" alt="Sydee" />
+        <div>
+          <div style="font-size:18px; font-weight:700;">Sydee</div>
+          <div class="muted">Product Design & Content</div>
+          <p class="muted">Creates visual layouts, copy, and ensures the bookstore feels polished and easy to use.</p>
+        </div>
       </div>
 
-      <div class="card">
-        <div style="font-size:18px; font-weight:700;">Why Choose Us</div>
-        <p class="muted">We focus on usability and clarity so you can spend more time reading, less time searching.</p>
-        <ul class="pill-list">
-          <li>Clean layout and readable design</li>
-          <li>Easy navigation from the top menu</li>
-          <li>Responsive card-style presentation</li>
-        </ul>
+      <div class="card team-card">
+        <img src="https://i.pravatar.cc/220?img=5" alt="Fais" />
+        <div>
+          <div style="font-size:18px; font-weight:700;">Fais</div>
+          <div class="muted">Frontend Development</div>
+          <p class="muted">Builds interactive pages, search, wishlist, and navigation so the site works smoothly on every device.</p>
+        </div>
+      </div>
+
+      <div class="card team-card">
+        <img src="https://i.pravatar.cc/220?img=8" alt="Achol" />
+        <div>
+          <div style="font-size:18px; font-weight:700;">Achol</div>
+          <div class="muted">Content & Culture</div>
+          <p class="muted">Selects thoughtful book recommendations and keeps the bookstore aligned with local reading trends.</p>
+        </div>
+      </div>
+
+      <div class="card team-card">
+        <img src="https://i.pravatar.cc/220?img=12" alt="Aqil" />
+        <div>
+          <div style="font-size:18px; font-weight:700;">Aqil</div>
+          <div class="muted">Experience & Support</div>
+          <p class="muted">Helps shape the shopping flow, and makes sure visitors find books quickly with a pleasant browsing experience.</p>
+        </div>
       </div>
     </div>
 
     <div class="card">
-      <div style="font-size:18px; font-weight:700;">Contact</div>
-      <p class="muted">
-        Have questions or suggestions? Reach us at <b>support@hazrulbookstore.example</b>.
-        (Replace this email with your real contact details.)
-      </p>
+      <div style="font-size:18px; font-weight:700;">Our Story</div>
+      <p class="muted">We built HazrulBookStore to create an aesthetic book browsing destination with useful tools for every reader.</p>
+      <ul class="pill-list">
+        <li>Personalized browsing with categories and wishlist features</li>
+        <li>Accessibility choices such as high contrast, grayscale, and zoom</li>
+        <li>Clear page structure with featured collections and product cards</li>
+      </ul>
     </div>
   </div>
 
@@ -200,9 +284,58 @@
     <div>© <span id="year"></span> HazrulBookStore. All rights reserved.</div>
   </div>
 
+  <div class="accessibility-tools" id="accessibility-tools">
+    <button type="button" class="primary" onclick="toggleAccessibilityMenu()">Accessibility</button>
+    <div class="accessibility-panel hidden" id="accessibility-panel">
+      <button type="button" onclick="setPageTheme('')">Normal</button>
+      <button type="button" onclick="setPageTheme('grayscale')">Grayscale</button>
+      <button type="button" onclick="setPageTheme('high-contrast')">High Contrast</button>
+      <button type="button" onclick="zoomIn()">Zoom In</button>
+      <button type="button" onclick="zoomOut()">Zoom Out</button>
+    </div>
+  </div>
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    const accessibilityPanel = document.getElementById('accessibility-panel');
+    function toggleAccessibilityMenu() {
+      accessibilityPanel.classList.toggle('hidden');
+    }
+
+    function setPageTheme(theme) {
+      document.documentElement.classList.remove('grayscale', 'high-contrast');
+      document.body.classList.remove('grayscale', 'high-contrast');
+      if (theme) {
+        document.documentElement.classList.add(theme);
+      } else {
+        zoomLevel = 100;
+        updatePageZoom();
+      }
+    }
+
+    let zoomLevel = 100;
+    function updatePageZoom() {
+      const scale = Math.min(1.4, Math.max(0.8, zoomLevel / 100));
+      document.documentElement.style.fontSize = zoomLevel + '%';
+      if ('zoom' in document.documentElement.style) {
+        document.documentElement.style.zoom = scale;
+        document.body.style.transform = '';
+      } else {
+        document.documentElement.style.zoom = '';
+        document.body.style.transformOrigin = '0 0';
+        document.body.style.transform = `scale(${scale})`;
+        document.body.style.width = '100%';
+      }
+    }
+    function zoomIn() {
+      zoomLevel = Math.min(140, zoomLevel + 10);
+      updatePageZoom();
+    }
+    function zoomOut() {
+      zoomLevel = Math.max(80, zoomLevel - 10);
+      updatePageZoom();
+    }
   </script>
 </body>
 </html>

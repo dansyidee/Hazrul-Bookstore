@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Book Details</title>
+  <link rel="stylesheet" href="home.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial; }
     body { background: #f5f5f5; }
@@ -60,6 +61,27 @@
       border-radius: 999px;
     }
 
+    .button-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .button-row button {
+      border: 1px solid black;
+      border-radius: 25px;
+      padding: 10px 16px;
+      color: white;
+      background: black;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .button-row button:hover {
+      transform: translateY(-1px);
+    }
+
     p {
       color: #555;
       line-height: 1.6;
@@ -91,13 +113,15 @@
 
         <p id="details-description">&nbsp;</p>
 
-        <div style="margin-top: 18px;">
-          <button id="add-to-cart" style="border: 1px solid black; border-radius: 25px; padding: 8px 16px; color: white; background: black; cursor: pointer;">Add to Cart</button>
+        <div class="button-row">
+          <button id="add-to-cart">Add to Cart</button>
+          <button id="wishlist-button">Add to Wishlist</button>
         </div>
       </div>
     </div>
   </div>
 
+  <script src="home.js"></script>
   <script src="details.js"></script>
 
 

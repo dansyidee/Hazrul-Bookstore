@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wishlist - HazrulBookStore</title>
+<link rel="stylesheet" href="home.css">
+</head>
+<body>
+<div class="navbar">
+  <div class="nav-top">
+    <div class="logo"><a href="home.html">HazrulBookStore</a></div>
+    <div class="search-bar">
+      <form id="search-form" onsubmit="return window.handleSearchFromForm ? window.handleSearchFromForm(event) : true">
+        <input id="search-term" type="text" placeholder="Search books..." />
+        <button type="submit">Search</button>
+      </form>
+    </div>
+    <div class="nav-right">
+      <details class="nav-cart" id="cart-dropdown">
+        <summary id="cart-summary">Cart (<span id="cart-count">0</span>)</summary>
+        <div class="cart-panel" id="cart-panel">
+          <div class="cart-items" id="cart-items"></div>
+          <div class="cart-actions">
+            <div class="cart-total" id="cart-total">Total: RM0.00</div>
+            <button type="button" class="cart-buy" onclick="window.buyNow && window.buyNow()">Buy Now</button>
+            <button type="button" class="cart-clear" onclick="window.clearCart && window.clearCart()">Clear</button>
+            <div id="buy-modal-root"></div>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+  <div class="nav-bottom">
+    <a href="home.html">Home</a>
+    <a href="wishlist.html">Wishlist</a>
+    <details class="nav-filter">
+      <summary>Filter</summary>
+      <div class="nav-filter-panel">
+        <div class="filter-group">
+          <div class="filter-label">Author</div>
+          <input id="filter-author" type="text" placeholder="Type author..." />
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Genres</div>
+          <div class="genre-checks">
+            <label><input type="checkbox" class="genre-check" value="Fiction" /> Fiction</label>
+            <label><input type="checkbox" class="genre-check" value="Non-fiction" /> Non-fiction</label>
+          </div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Price</div>
+          <div class="price-row">
+            <input id="filter-price-min" type="number" min="0" step="0.01" placeholder="Min" />
+            <input id="filter-price-max" type="number" min="0" step="0.01" placeholder="Max" />
+          </div>
+        </div>
+        <div style="display:flex; gap:12px; margin-top:12px;">
+          <button type="button" class="filter-enter" onclick="window.applyFilters && window.applyFilters()">Enter</button>
+          <button type="button" class="filter-reset" onclick="window.resetFilters && window.resetFilters()">Reset</button>
+        </div>
+      </div>
+    </details>
+    <div class="sort-wrapper">
+      <label for="sort-order">Sort</label>
+      <select id="sort-order" onchange="window.applySort && window.applySort()">
+        <option value="">Default</option>
+        <option value="title-asc">A - Z</option>
+        <option value="price-asc">Price Low - High</option>
+        <option value="price-desc">Price High - Low</option>
+      </select>
+    </div>
+    <a href="about.html">About</a>
+  </div>
+</div>
+
+<div class="featured-bar">
+  <div class="featured-card">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+      <div>
+        <h2>Your Wishlist</h2>
+        <p style="color:#555; margin:0;">Saved favorites appear here. Remove or keep books for later.</p>
+      </div>
+      <button type="button" onclick="window.clearWishlist && window.clearWishlist()" style="border: 1px solid #111; border-radius: 999px; padding: 10px 18px; background: #111; color: #fff; cursor: pointer;">Clear Wishlist</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="books" id="wishlist-items"></div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-title">HazrulBookStore</div>
+      <p>Keep your favorite books safe and return whenever you want to shop.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-head">Menu</div>
+      <a href="home.html">Home</a>
+      <a href="wishlist.html">Wishlist</a>
+      <a href="about.html">About</a>
+    </div>
+    <div class="footer-contact">
+      <div class="footer-head">Contact</div>
+      <p>acholbooks@gmail.com</p>
+      <p>+60 12-345 6789</p>
+    </div>
+    <div class="footer-social">
+      <div class="footer-head">Social</div>
+      <p>Facebook</p>
+      <p>Instagram</p>
+      <p>TikTok</p>
+    </div>
+  </div>
+  <div class="footer-bottom">© <span id="year"></span> HazrulBookStore. All rights reserved.</div>
+</footer>
+
+<div class="accessibility-tools" id="accessibility-tools">
+  <button type="button" class="primary" onclick="window.toggleAccessibilityMenu && window.toggleAccessibilityMenu()">Accessibility</button>
+  <div class="accessibility-panel hidden" id="accessibility-panel">
+    <button type="button" onclick="window.setPageTheme && window.setPageTheme('')">Normal</button>
+    <button type="button" onclick="window.setPageTheme && window.setPageTheme('grayscale')">Grayscale</button>
+    <button type="button" onclick="window.setPageTheme && window.setPageTheme('high-contrast')">High Contrast</button>
+    <button type="button" onclick="window.zoomIn && window.zoomIn()">Zoom In</button>
+    <button type="button" onclick="window.zoomOut && window.zoomOut()">Zoom Out</button>
+  </div>
+</div>
+
+<script src="details.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="home.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
