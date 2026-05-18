@@ -87,6 +87,29 @@ function sortBooks(items) {
   return sorted;
 }
 
+function getSearchQuery() {
+  const searchInput = document.getElementById('search-term');
+  return (searchInput && searchInput.value ? searchInput.value : '').trim().toLowerCase();
+}
+
+function bookMatchesSearch(book, query) {
+  if (!query) return true;
+
+  const title = String(book.title || '').toLowerCase();
+  const author = String(book.author || '').toLowerCase();
+  const genre = String(book.genre || '').toLowerCase();
+  return title.includes(query) || author.includes(query) || genre.includes(query);
+}
+
+function scrollBooksToTop() {
+  const booksWrap = document.getElementById('books');
+  if (!booksWrap) return;
+
+  requestAnimationFrame(() => {
+    booksWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
 window.toggleAccessibilityMenu = function toggleAccessibilityMenu() {
   const panel = document.getElementById('accessibility-panel');
   if (!panel) return;
@@ -342,6 +365,8 @@ function showQuantityModal(book) {
 async function applyFilters() {
   const allBooks = await loadBooksWithAjax();
 
+  const searchQuery = getSearchQuery();
+
   const AuthorInput = document.getElementById('filter-author');
   const AuthorQuery = (AuthorInput && AuthorInput.value ? AuthorInput.value.trim().toLowerCase() : '');
 
@@ -355,6 +380,8 @@ async function applyFilters() {
 
   const filtered = Array.isArray(allBooks)
     ? allBooks.filter((b) => {
+        if (!bookMatchesSearch(b, searchQuery)) return false;
+
         if (AuthorQuery) {
           const author = String(b.author || '').toLowerCase();
           const title = String(b.title || '').toLowerCase();
@@ -377,6 +404,7 @@ async function applyFilters() {
     : [];
 
   renderBooks(sortBooks(filtered));
+  scrollBooksToTop();
 }
 
 // ----- Scroll reveal for book cards -----
@@ -454,8 +482,7 @@ async function loadBooksWithAjax() {
 window.loadAndRenderBooks = async function loadAndRenderBooks() {
   const allBooks = await loadBooksWithAjax();
 
-  const searchInput = document.getElementById('search-term');
-  const q = (searchInput && searchInput.value ? searchInput.value : '').trim().toLowerCase();
+  const q = getSearchQuery();
 
   renderFeaturedSections(allBooks);
 
@@ -466,13 +493,12 @@ window.loadAndRenderBooks = async function loadAndRenderBooks() {
 
   const filtered = Array.isArray(allBooks)
     ? allBooks.filter((b) => {
-        const title = String(b.title || '').toLowerCase();
-        const author = String(b.author || '').toLowerCase();
-        return title.includes(q) || author.includes(q);
+        return bookMatchesSearch(b, q);
       })
     : [];
 
   renderBooks(sortBooks(filtered));
+  scrollBooksToTop();
 };
 
 window.handleSearch = async function handleSearch() {
@@ -542,6 +568,7 @@ window.applySort = async function applySort() {
   const genreChecks = Array.from(document.querySelectorAll('input.genre-check'));
 
   const hasFilter =
+    getSearchQuery() ||
     (authorInput && authorInput.value.trim()) ||
     (minEl && minEl.value) ||
     (maxEl && maxEl.value) ||
@@ -551,7 +578,10 @@ window.applySort = async function applySort() {
     return window.applyFilters && window.applyFilters();
   }
 
-  return window.loadAndRenderBooks && window.loadAndRenderBooks();
+  if (window.loadAndRenderBooks) {
+    await window.loadAndRenderBooks();
+    scrollBooksToTop();
+  }
 };
 
 // ----- Cart (sessionStorage) -----
@@ -874,7 +904,7 @@ const featuredRows = {
 
 function featuredBookHTML(b) {
   return `
-      <div class="featured-item">
+      <div class="featured-item" role="button" tabindex="0">
         <img src="${b.image}" alt="${b.title}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,${encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"160\"><rect width=\"120\" height=\"160\" fill=\"#e5e5e5\"/><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"#666\" font-family=\"Arial\" font-size=\"12\">No Image</text></svg>')}';" />
         <div class="featured-item-title">${b.title}</div>
       </div>
@@ -895,6 +925,29 @@ function renderFeaturedRow(rowId) {
 
   const start = row.page * featuredPageSize;
   list.innerHTML = row.books.slice(start, start + featuredPageSize).map(featuredBookHTML).join('');
+  Array.from(list.querySelectorAll('.featured-item')).forEach((item, index) => {
+    const book = row.books[start + index];
+    const openDetails = () => {
+      if (!book || typeof window.showBookDetails !== 'function') return;
+      window.showBookDetails({
+        title: book.title,
+        author: book.author,
+        genre: book.genre,
+        description: book.description || 'No description available.',
+        image: book.image,
+        price: book.price,
+        stock: book.stock
+      });
+    };
+
+    item.addEventListener('click', openDetails);
+    item.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openDetails();
+      }
+    });
+  });
 
   const buttons = list.closest('.featured-row')?.querySelectorAll('.featured-row-button');
   if (buttons && buttons.length >= 2) {
@@ -946,7 +999,7 @@ window.renderWishlistPage = function renderWishlistPage() {
 
   const wishlist = getWishlist();
   if (!wishlist.length) {
-    container.innerHTML = '<div class="book" style="text-align:center; padding: 24px;">Your wishlist is empty. Browse books and tap Add to Wishlist.</div>';
+    container.innerHTML = '<div class="wishlist-empty">Your wishlist is empty. Browse books and tap Add to Wishlist.</div>';
     return;
   }
 
@@ -954,17 +1007,31 @@ window.renderWishlistPage = function renderWishlistPage() {
 
   for (const item of wishlist) {
     const row = document.createElement('div');
-    row.className = 'book';
+    row.className = 'wishlist-card';
     row.innerHTML = `
-      <div class="book-img">
+      <div class="wishlist-cover">
         <img src="${item.image || ''}" alt="${item.title || ''}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,${encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"160\"><rect width=\"120\" height=\"160\" fill=\"#e5e5e5\"/><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"#666\" font-family=\"Arial\" font-size=\"12\">No Image</text></svg>')}';" />
       </div>
-      <h4>${item.title || ''}</h4>
-      <p>${item.author || ''}</p>
-      <p>${item.genre || ''}</p>
-      <p>RM${Number(item.price).toFixed(2)}</p>
-      <button class="wishlist-btn" type="button">Remove</button>
+      <div class="wishlist-info">
+        <h3>${item.title || ''}</h3>
+        <p>${item.author || 'Author unavailable'}</p>
+        <div class="wishlist-meta">
+          <span>${item.genre || 'Book'}</span>
+          <strong>RM${Number(item.price).toFixed(2)}</strong>
+        </div>
+        <div class="wishlist-actions">
+          <button class="wishlist-open" type="button">View Details</button>
+          <button class="wishlist-btn" type="button">Remove</button>
+        </div>
+      </div>
     `;
+
+    const openBtn = row.querySelector('.wishlist-open');
+    if (openBtn) {
+      openBtn.addEventListener('click', () => {
+        window.showBookDetails && window.showBookDetails(item);
+      });
+    }
 
     const removeBtn = row.querySelector('.wishlist-btn');
     if (removeBtn) {

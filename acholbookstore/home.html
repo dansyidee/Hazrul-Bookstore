@@ -12,21 +12,40 @@
 
 <!-- NAVBAR -->
 <div class="navbar">
-  <div class="nav-top">
-    <div class="logo"><a href="#">HazrulBookStore</a></div>
+  <div class="nav-promo">
+    <div class="nav-socials" aria-label="Contact and social links">
+      <span>☎</span>
+      <span>✉</span>
+      <span>f</span>
+      <span>◎</span>
+      <span>in</span>
+      <span>♪</span>
+    </div>
+    <button class="promo-arrow" type="button" aria-label="Previous promotion">‹</button>
+    <div class="promo-text">Sign up for our newsletter and get RM5 off your first order.</div>
+    <button class="promo-arrow" type="button" aria-label="Next promotion">›</button>
+  </div>
+
+  <div class="nav-main">
+    <div class="logo"><a href="home.html"><span>Hazrul</span>BookStore</a></div>
 
     <div class="search-bar">
       <form id="search-form" onsubmit="return window.handleSearchFromForm ? window.handleSearchFromForm(event) : true">
-        <input id="search-term" type="text" placeholder="Search books..." />
-        <button type="submit">Search</button>
+        <button type="submit" aria-label="Search">⌕</button>
+        <input id="search-term" type="text" placeholder="Title, Author, Keyword or ISBN" />
       </form>
     </div>
 
-
     <div class="nav-right">
-      <a href="wishlist.html">Wishlist</a>
+      <a class="account-pill" href="wishlist.html">
+        <span class="account-icon">♙</span>
+        <span><small>Wishlist</small>My Account</span>
+      </a>
       <details class="nav-cart" id="cart-dropdown">
-        <summary id="cart-summary">Cart (<span id="cart-count">0</span>)</summary>
+        <summary id="cart-summary">
+          <span class="cart-icon">🛒</span>
+          <span>Cart (<span id="cart-count">0</span>)</span>
+        </summary>
         <div class="cart-panel" id="cart-panel">
           <div class="cart-items" id="cart-items"></div>
           <div class="cart-actions">
@@ -38,16 +57,18 @@
           </div>
         </div>
       </details>
+      <div class="currency-select">MYR⌄</div>
     </div>
-
   </div>
 
   <div class="nav-bottom">
-    <a href="home.html">Home</a>
-    <a href="wishlist.html">Wishlist</a>
+    <a href="#new-release-section">New Releases⌄</a>
+    <a href="#best-sellers-section">Bestsellers⌄</a>
+    <a href="#top-ten-section">Top 10 Malaysia⌄</a>
+    <a href="#books">All Books⌄</a>
 
     <details class="nav-filter">
-      <summary>Filter</summary>
+      <summary>Filter⌄</summary>
 
       <div class="nav-filter-panel">
         <div class="filter-group">
@@ -89,20 +110,52 @@
       </select>
     </div>
 
-    <a href="#new-release-section">New Releases</a>
-    <a href="#best-sellers-section">Bestsellers</a>
-    <a href="about.html">About</a>
+    <a href="about.html">About⌄</a>
   </div>
-
-
 </div>
 
 <!-- HERO -->
 <div class="hero">
   <div class="slides" id="slides">
-    <div class="slide" style="background-image:url('https://images5.alphacoders.com/413/413842.jpg')"></div>
-    <div class="slide" style="background-image:url('https://wallpapercave.com/wp/wp5334521.jpg')"></div>
-    <div class="slide" style="background-image:url('https://images.hdqwalls.com/wallpapers/akatsuki-naruto-4k-2n.jpg')"></div>
+    <div class="slide sale-slide">
+      <div class="promo-books left-books">
+        <div class="promo-book light">Light<br>and<br>Thread</div>
+        <div class="promo-book blue">Open<br>to<br>Work</div>
+        <div class="promo-book dark">Ramlee<br>Awang<br>Murshid</div>
+        <div class="promo-book floral">The<br>Faraway<br>Inn</div>
+      </div>
+      <div class="promo-center">
+        <div class="promo-badge">Hazrul BookStore</div>
+        <h1>Gotta Have It!</h1>
+        <div class="promo-discount">20% <span>OFF</span></div>
+        <p>for members on selected titles</p>
+        <strong>MAY 2026</strong>
+      </div>
+      <div class="promo-books right-books">
+        <div class="promo-book green">The<br>Thinking<br>Machine</div>
+        <div class="promo-book white">Sacred<br>Echoes</div>
+        <div class="promo-book red">The Ending<br>Writes<br>Itself</div>
+        <div class="promo-book art">Honey<br>in the<br>Wound</div>
+      </div>
+    </div>
+    <div class="slide sale-slide alt-slide">
+      <div class="promo-center wide">
+        <div class="promo-badge">Reader Rewards</div>
+        <h1>Weekend Book Deals</h1>
+        <div class="promo-discount">RM5 <span>OFF</span></div>
+        <p>sign up, browse, and discover your next favorite read</p>
+        <strong>ONLINE EXCLUSIVE</strong>
+      </div>
+    </div>
+    <div class="slide sale-slide calm-slide">
+      <div class="promo-center wide">
+        <div class="promo-badge">Fresh Picks</div>
+        <h1>New Stories Arrived</h1>
+        <div class="promo-discount">TOP <span>10</span></div>
+        <p>popular titles, best sellers, and fresh releases in one place</p>
+        <strong>SHOP NOW</strong>
+      </div>
+    </div>
   </div>
 
   <button class="prev" onclick="moveSlide(-1)">❮</button>
