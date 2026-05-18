@@ -542,17 +542,21 @@ body {
 .featured-bar {
   max-width: 1200px;
   margin: 24px auto;
-  padding: 0 20px;
+  padding: 18px 20px;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 18px;
+  gap: 0;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 }
 
 .featured-card {
-  background: white;
-  border-radius: 18px;
-  padding: 18px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  padding: 18px 0;
+}
+
+.featured-card + .featured-card {
+  border-top: 1px solid #eee;
 }
 
 .featured-card h2 {
@@ -561,10 +565,39 @@ body {
   color: #111;
 }
 
+.featured-row {
+  display: grid;
+  grid-template-columns: 42px 1fr 42px;
+  align-items: center;
+  gap: 12px;
+}
+
+.featured-list-wrapper {
+  overflow: hidden;
+}
+
 .featured-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 14px;
+}
+
+.featured-row-button {
+  border: none;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+  display: grid;
+  place-items: center;
+}
+
+.featured-row-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 .featured-item {
@@ -588,6 +621,34 @@ body {
   font-weight: 700;
   color: #111;
   font-size: 14px;
+}
+
+.all-books-banner {
+  max-width: 1200px;
+  margin: 30px auto 8px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 18px;
+}
+
+.all-books-banner h2 {
+  margin: 0;
+  padding: 14px 28px;
+  border: 1px solid #111;
+  border-radius: 999px;
+  background: #111;
+  color: white;
+  font-size: 22px;
+  letter-spacing: 0;
+  text-align: center;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+}
+
+.all-books-banner-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #111, transparent);
 }
 
 .book-actions {
@@ -747,6 +808,13 @@ html.reduced-motion * {
   .books {
     grid-template-columns: repeat(2, 1fr);
   }
+  .all-books-banner {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .all-books-banner-line {
+    width: 100%;
+  }
 }
 
 @media (max-width: 620px) {
@@ -876,5 +944,3 @@ button:hover {
     grid-template-columns: 1fr;
   }
 }
-
-
