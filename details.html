@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Book Details</title>
-  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="index.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
     body {
@@ -176,7 +176,7 @@
 </head>
 <body>
   <main class="details-page">
-    <a class="back" href="home.html">← Back to Home</a>
+    <a class="back" href="index.html">← Back to Home</a>
 
     <div class="wrap">
       <div class="row">
@@ -218,7 +218,7 @@
       </div>
       <div class="footer-links">
         <div class="footer-head">Menu</div>
-        <a href="home.html">Home</a>
+        <a href="index.html">Home</a>
         <a href="wishlist.html">Wishlist</a>
         <a href="about.html">About</a>
       </div>
@@ -240,7 +240,7 @@
   <div class="accessibility-tools" id="accessibility-tools">
     <button type="button" class="primary" onclick="window.toggleAccessibilityMenu && window.toggleAccessibilityMenu()">Accessibility</button>
     <div class="accessibility-panel hidden" id="accessibility-panel">
-      <button type="button" onclick="window.setPageTheme && window.setPageTheme('dark-mode')">Normal</button>
+      <button type="button" onclick="window.setPageTheme && window.setPageTheme('')">Normal</button>
       <button type="button" onclick="window.setPageTheme && window.setPageTheme('')">Light Mode</button>
       <button type="button" onclick="window.setPageTheme && window.setPageTheme('dark-mode')">Dark Mode</button>
       <button type="button" onclick="window.setPageTheme && window.setPageTheme('grayscale')">Grayscale</button>
@@ -251,7 +251,7 @@
     </div>
   </div>
 
-  <script src="home.js"></script>
+  <script src="index.js"></script>
   <script>
     window.setPageTheme && window.setPageTheme('dark-mode');
   </script>
