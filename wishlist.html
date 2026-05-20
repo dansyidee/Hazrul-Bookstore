@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wishlist - HazrulBookStore</title>
-<link rel="stylesheet" href="home.css">
+<link rel="stylesheet" href="index.css">
 </head>
 <body>
 <div class="navbar wishlist-navbar">
@@ -15,7 +15,7 @@
   </div>
 
   <div class="nav-main">
-    <div class="logo"><a href="home.html"><span>Hazrul</span>BookStore</a></div>
+    <div class="logo"><a href="index.html"><span>Hazrul</span>BookStore</a></div>
     <div class="search-bar">
       <form id="search-form" onsubmit="return window.handleSearchFromForm ? window.handleSearchFromForm(event) : true">
         <button type="submit" aria-label="Search">⌕</button>
@@ -42,16 +42,15 @@
           </div>
         </div>
       </details>
-      <div class="currency-select">MYR⌄</div>
     </div>
   </div>
 
   <div class="nav-bottom">
-    <a href="home.html">Home</a>
+    <a href="index.html">Home</a>
     <a href="wishlist.html">Wishlist</a>
-    <a href="home.html#new-release-section">New Releases</a>
-    <a href="home.html#best-sellers-section">Bestsellers</a>
-    <a href="home.html#books">All Books</a>
+    <a href="index.html#new-release-section">New Releases</a>
+    <a href="index.html#best-sellers-section">Bestsellers</a>
+    <a href="index.html#books">All Books</a>
     <a href="about.html">About</a>
   </div>
 </div>
@@ -86,7 +85,7 @@
     </div>
     <div class="footer-links">
       <div class="footer-head">Menu</div>
-      <a href="home.html">Home</a>
+      <a href="index.html">Home</a>
       <a href="wishlist.html">Wishlist</a>
       <a href="about.html">About</a>
     </div>
@@ -108,7 +107,7 @@
 <div class="accessibility-tools" id="accessibility-tools">
   <button type="button" class="primary" onclick="window.toggleAccessibilityMenu && window.toggleAccessibilityMenu()">Accessibility</button>
   <div class="accessibility-panel hidden" id="accessibility-panel">
-    <button type="button" onclick="window.setPageTheme && window.setPageTheme('dark-mode')">Normal</button>
+    <button type="button" onclick="window.setPageTheme && window.setPageTheme('')">Normal</button>
     <button type="button" onclick="window.setPageTheme && window.setPageTheme('')">Light Mode</button>
     <button type="button" onclick="window.setPageTheme && window.setPageTheme('dark-mode')">Dark Mode</button>
     <button type="button" onclick="window.setPageTheme && window.setPageTheme('grayscale')">Grayscale</button>
@@ -121,7 +120,7 @@
 
 <script src="details.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="home.js"></script>
+<script src="index.js"></script>
 <script>
   window.setPageTheme && window.setPageTheme('dark-mode');
 </script>
