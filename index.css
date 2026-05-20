@@ -1528,7 +1528,7 @@ html.dark-mode .accessibility-tools button {
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 320px) {
   .books {
     grid-template-columns: 1fr;
   }
