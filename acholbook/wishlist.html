@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wishlist - HazrulBookStore</title>
+<link rel="stylesheet" href="index.css">
+</head>
+<body>
+<div class="navbar wishlist-navbar">
+  <div class="nav-promo">
+    <button class="promo-arrow" type="button" aria-label="Previous promotion">&lt;</button>
+    <div class="promo-text">Your saved books are ready whenever you are.</div>
+    <button class="promo-arrow" type="button" aria-label="Next promotion">&gt;</button>
+  </div>
+
+  <div class="nav-main">
+    <div class="logo"><a href="index.html"><span>Hazrul</span>BookStore</a></div>
+    <div class="search-bar">
+      <form id="search-form" onsubmit="return window.handleSearchFromForm ? window.handleSearchFromForm(event) : true">
+        <button type="submit" aria-label="Search">⌕</button>
+        <input id="search-term" type="text" placeholder="Title, Author, Keyword or ISBN" />
+      </form>
+    </div>
+    <div class="nav-right">
+      <a class="account-pill" href="wishlist.html">
+        <span class="account-icon">♡</span>
+        <span><small>Saved Books</small>Wishlist</span>
+      </a>
+      <details class="nav-cart" id="cart-dropdown">
+        <summary id="cart-summary">
+          <span class="cart-icon">🛒</span>
+          <span>Cart (<span id="cart-count">0</span>)</span>
+        </summary>
+        <div class="cart-panel" id="cart-panel">
+          <div class="cart-items" id="cart-items"></div>
+          <div class="cart-actions">
+            <div class="cart-total" id="cart-total">Total: RM0.00</div>
+            <button type="button" class="cart-buy" onclick="window.buyNow && window.buyNow()">Buy Now</button>
+            <button type="button" class="cart-clear" onclick="window.clearCart && window.clearCart()">Clear</button>
+            <div id="buy-modal-root"></div>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="nav-bottom">
+    <a href="index.html">Home</a>
+    <a href="wishlist.html">Wishlist</a>
+    <a href="index.html#new-release-section">New Releases</a>
+    <a href="index.html#best-sellers-section">Bestsellers</a>
+    <a href="index.html#books">All Books</a>
+    <a href="about.html">About</a>
+  </div>
+</div>
+
+<main class="wishlist-page">
+  <section class="wishlist-hero">
+    <div>
+      <p class="wishlist-eyebrow">Saved Selection</p>
+      <h1>Your Wishlist</h1>
+      <p>Keep your favorite books in one polished place and return to them when you are ready to shop.</p>
+    </div>
+    <button type="button" onclick="window.clearWishlist && window.clearWishlist()">Clear Wishlist</button>
+  </section>
+
+  <section class="wishlist-shell">
+    <div class="wishlist-header">
+      <div>
+        <h2>Saved Books</h2>
+        <p>Remove titles you no longer want, or open a book to review it again.</p>
+      </div>
+    </div>
+
+    <div class="wishlist-grid" id="wishlist-items"></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-title">HazrulBookStore</div>
+      <p>Keep your favorite books safe and return whenever you want to shop.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-head">Menu</div>
+      <a href="index.html">Home</a>
+      <a href="wishlist.html">Wishlist</a>
+      <a href="about.html">About</a>
+    </div>
+    <div class="footer-contact">
+      <div class="footer-head">Contact</div>
+      <p>acholbooks@gmail.com</p>
+      <p>+60 12-345 6789</p>
+    </div>
+    <div class="footer-social">
+      <div class="footer-head">Social</div>
+      <p>Facebook</p>
+      <p>Instagram</p>
+      <p>TikTok</p>
+    </div>
+  </div>
+  <div class="footer-bottom">&copy; <span id="year"></span> HazrulBookStore. All rights reserved.</div>
+</footer>
+
+<div class="accessibility-tools" id="accessibility-tools">
+  <button type="button" class="primary" onclick="window.toggleAccessibilityMenu && window.toggleAccessibilityMenu()">Accessibility</button>
+  <div class="accessibility-panel hidden" id="accessibility-panel">
+    <button type="button" onclick="window.setPageTheme && window.setPageTheme('')">Normal</button>
+    <button type="button" onclick="window.setPageTheme && window.setPageTheme('')">Light Mode</button>
+    <button type="button" onclick="window.setPageTheme && window.setPageTheme('dark-mode')">Dark Mode</button>
+    <button type="button" onclick="window.setPageTheme && window.setPageTheme('grayscale')">Grayscale</button>
+    <button type="button" onclick="window.setPageTheme && window.setPageTheme('high-contrast')">High Contrast</button>
+    <button type="button" onclick="window.zoomIn && window.zoomIn()">Zoom In</button>
+    <button type="button" onclick="window.zoomOut && window.zoomOut()">Zoom Out</button>
+    <button type="button" onclick="window.setPageTheme && window.setPageTheme('reduced-motion')">Reduced Motion</button>
+  </div>
+</div>
+
+<script src="details.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="index.js"></script>
+<script>
+  window.setPageTheme && window.setPageTheme('dark-mode');
+</script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

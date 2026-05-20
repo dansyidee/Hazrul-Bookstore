@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Store</title>
+
+<link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="nav-promo">
+    <button class="promo-arrow" type="button" aria-label="Previous promotion">‹</button>
+    <div class="promo-text">Sign up for our newsletter and get RM5 off your first order.</div>
+    <button class="promo-arrow" type="button" aria-label="Next promotion">›</button>
+  </div>
+
+  <div class="nav-main">
+    <div class="logo"><a href="index.html"><span>Hazrul</span>BookStore</a></div>
+
+    <div class="search-bar">
+      <form id="search-form" onsubmit="return window.handleSearchFromForm ? window.handleSearchFromForm(event) : true">
+        <button type="submit" aria-label="Search">⌕</button>
+        <input id="search-term" type="text" placeholder="Title, Author, Keyword or ISBN" />
+      </form>
+    </div>
+
+    <div class="nav-right">
+      <a class="account-pill" href="wishlist.html">
+        <span class="account-icon">♙</span>
+        <span><small>My Account</small>Wishlist</span>
+      </a>
+      <details class="nav-cart" id="cart-dropdown">
+        <summary id="cart-summary">
+          <span class="cart-icon">🛒</span>
+          <span>Cart (<span id="cart-count">0</span>)</span>
+        </summary>
+        <div class="cart-panel" id="cart-panel">
+          <div class="cart-items" id="cart-items"></div>
+          <div class="cart-actions">
+            <div class="cart-total" id="cart-total">Total: RM0.00</div>
+            <button type="button" class="cart-buy" onclick="window.buyNow && window.buyNow()">Buy Now</button>
+            <button type="button" class="cart-clear" onclick="window.clearCart && window.clearCart()">Clear</button>
+
+            <div id="buy-modal-root"></div>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="nav-bottom">
+    <a href="#new-release-section">New Releases</a>
+    <a href="#best-sellers-section">Bestsellers</a>
+    <a href="#top-ten-section">Top 10 in Malaysia</a>
+    <a href="#books">All Books</a>
+
+    <details class="nav-filter">
+      <summary>Filter⌄</summary>
+
+      <div class="nav-filter-panel">
+        <div class="filter-group">
+          <div class="filter-label">Author</div>
+          <input id="filter-author" type="text" placeholder="Type author..." />
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Genres</div>
+          <div class="genre-checks">
+            <label><input type="checkbox" class="genre-check" value="Fiction" /> Fiction</label>
+            <label><input type="checkbox" class="genre-check" value="Non-fiction" /> Non-fiction</label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Price</div>
+          <div class="price-row">
+            <input id="filter-price-min" type="number" min="0" step="0.01" placeholder="Min" />
+            <input id="filter-price-max" type="number" min="0" step="0.01" placeholder="Max" />
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; margin-top:12px;">
+          <button type="button" class="filter-enter" onclick="window.applyFilters && window.applyFilters()">Enter</button>
+          <button type="button" class="filter-reset" onclick="window.resetFilters && window.resetFilters()">Reset</button>
+        </div>
+
+      </div>
+    </details>
+
+    <div class="sort-wrapper">
+      <label for="sort-order">Sort</label>
+      <select id="sort-order" onchange="window.applySort && window.applySort()">
+        <option value="">Default</option>
+        <option value="title-asc">A - Z</option>
+        <option value="price-asc">Price Low - High</option>
+        <option value="price-desc">Price High - Low</option>
+      </select>
+    </div>
+
+    <a href="about.html">About</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="slides" id="slides">
+    <div class="slide sale-slide">
+      <div class="promo-books left-books">
+        <div class="promo-book light">Light<br>and<br>Thread</div>
+        <div class="promo-book blue">Open<br>to<br>Work</div>
+        <div class="promo-book dark">Ramlee<br>Awang<br>Murshid</div>
+        <div class="promo-book floral">The<br>Faraway<br>Inn</div>
+      </div>
+      <div class="promo-center">
+        <div class="promo-badge">Hazrul BookStore</div>
+        <h1>Gotta Have It!</h1>
+        <div class="promo-discount">20% <span>OFF</span></div>
+        <p>for members on selected titles</p>
+        <strong>MAY 2026</strong>
+      </div>
+      <div class="promo-books right-books">
+        <div class="promo-book green">The<br>Thinking<br>Machine</div>
+        <div class="promo-book white">Sacred<br>Echoes</div>
+        <div class="promo-book red">The Ending<br>Writes<br>Itself</div>
+        <div class="promo-book art">Honey<br>in the<br>Wound</div>
+      </div>
+    </div>
+    <div class="slide sale-slide alt-slide">
+      <div class="promo-center wide">
+        <div class="promo-badge">Reader Rewards</div>
+        <h1>Weekend Book Deals</h1>
+        <div class="promo-discount">RM5 <span>OFF</span></div>
+        <p>sign up, browse, and discover your next favorite read</p>
+        <strong>ONLINE EXCLUSIVE</strong>
+      </div>
+    </div>
+    <div class="slide sale-slide calm-slide">
+      <div class="promo-center wide">
+        <div class="promo-badge">Fresh Picks</div>
+        <h1>New Stories Arrived</h1>
+        <div class="promo-discount">TOP <span>10</span></div>
+        <p>popular titles, best sellers, and fresh releases in one place</p>
+        <strong>SHOP NOW</strong>
+      </div>
+    </div>
+  </div>
+
+  <button class="prev" onclick="moveSlide(-1)">❮</button>
+  <button class="next" onclick="moveSlide(1)">❯</button>
+</div>
+
+<div class="featured-bar">
+  <div class="featured-card" id="new-release-section">
+    <h2>New Releases</h2>
+    <div class="featured-row">
+      <button class="featured-row-button" type="button" onclick="moveFeaturedRow('new-releases', -1)">❮</button>
+      <div class="featured-list-wrapper" data-featured-wrapper="new-releases">
+        <div class="featured-list" id="new-releases"></div>
+      </div>
+      <button class="featured-row-button" type="button" onclick="moveFeaturedRow('new-releases', 1)">❯</button>
+    </div>
+  </div>
+  <div class="featured-card" id="best-sellers-section">
+    <h2>Best Sellers</h2>
+    <div class="featured-row">
+      <button class="featured-row-button" type="button" onclick="moveFeaturedRow('best-sellers', -1)">❮</button>
+      <div class="featured-list-wrapper" data-featured-wrapper="best-sellers">
+        <div class="featured-list" id="best-sellers"></div>
+      </div>
+      <button class="featured-row-button" type="button" onclick="moveFeaturedRow('best-sellers', 1)">❯</button>
+    </div>
+  </div>
+  <div class="featured-card" id="top-ten-section">
+    <h2>Top 10 Malaysia</h2>
+    <div class="featured-row">
+      <button class="featured-row-button" type="button" onclick="moveFeaturedRow('top-ten', -1)">❮</button>
+      <div class="featured-list-wrapper" data-featured-wrapper="top-ten">
+        <div class="featured-list" id="top-ten"></div>
+      </div>
+      <button class="featured-row-button" type="button" onclick="moveFeaturedRow('top-ten', 1)">❯</button>
+    </div>
+  </div>
+</div>
+
+<section class="all-books-banner" aria-label="All Books">
+  <div class="all-books-banner-line"></div>
+  <h2>All Books</h2>
+  <div class="all-books-banner-line"></div>
+</section>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- BOOKS -->
+
+  <div class="books" id="books"></div>
+
+</div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-title">HazrulBookStore</div>
+      <p>Discover curated new releases, best sellers, and local favorites with an easy shopping experience.</p>
+    </div>
+    <div class="footer-links">
+      <div class="footer-head">Menu</div>
+      <a href="index.html">Home</a>
+      <a href="wishlist.html">Wishlist</a>
+      <a href="about.html">About</a>
+    </div>
+    <div class="footer-contact">
+      <div class="footer-head">Contact</div>
+      <p>acholbooks@gmail.com</p>
+      <p>+60 12-345 6789</p>
+    </div>
+    <div class="footer-social">
+      <div class="footer-head">Social</div>
+      <p>Facebook</p>
+      <p>Instagram</p>
+      <p>TikTok</p>
+    </div>
+  </div>
+  <div class="footer-bottom">© <span id="year"></span> HazrulBookStore. All rights reserved.</div>
+</footer>
+
+  <div class="accessibility-tools" id="accessibility-tools">
+    <button type="button" class="primary" onclick="window.toggleAccessibilityMenu && window.toggleAccessibilityMenu()">Accessibility</button>
+    <div class="accessibility-panel hidden" id="accessibility-panel">
+      <button type="button" onclick="window.setPageTheme && window.setPageTheme('')">Normal</button>
+      <button type="button" onclick="window.setPageTheme && window.setPageTheme('')">Light Mode</button>
+      <button type="button" onclick="window.setPageTheme && window.setPageTheme('dark-mode')">Dark Mode</button>
+      <button type="button" onclick="window.setPageTheme && window.setPageTheme('grayscale')">Grayscale</button>
+      <button type="button" onclick="window.setPageTheme && window.setPageTheme('high-contrast')">High Contrast</button>
+      <button type="button" onclick="window.zoomIn && window.zoomIn()">Zoom In</button>
+      <button type="button" onclick="window.zoomOut && window.zoomOut()">Zoom Out</button>
+      <button type="button" onclick="window.setPageTheme && window.setPageTheme('reduced-motion')">Reduced Motion</button>
+    </div>
+  </div>
+
+  <!-- Book data is loaded from books.json using AJAX in index.js. -->
+  <script src="details.js"></script>
+  <!-- EmailJS (required for Buy Now email sending). Replace init() values in index.js. -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="index.js"></script>
+
+  <script>
+    window.setPageTheme && window.setPageTheme('dark-mode');
+  </script>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+    (function () {
+      if (window.setPageTheme) {
+        window.setPageTheme('dark-mode');
+      } else {
+        document.documentElement.classList.add('dark-mode');
+        document.body.classList.add('dark-mode');
+      }
+    })();
+  </script>
+
+</body>
+</html>
+
+
