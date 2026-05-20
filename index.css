@@ -1530,7 +1530,7 @@ html.dark-mode .accessibility-tools button {
 
 @media (max-width: 320px) {
   .books {
-    grid-template-columns: 1fr;
+    grid-template-columns: 2fr;
   }
   .logo a {
     font-size: 30px;
